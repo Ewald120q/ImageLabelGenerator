@@ -4,10 +4,14 @@ import numpy as np
 import os
 import glob
 
+def checkRange(image: Image, length, min): #checks, if right
+
+
 def checkImage(image: Image):
     for x in range(0,image.width):
         for y in range(0,image.height):
-            print('abx')
+            if image.getpixel((x,y))==rightColor:
+                print('a')
 
 
 if __name__ == '__main__':
