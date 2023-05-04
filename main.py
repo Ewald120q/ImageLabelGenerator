@@ -31,15 +31,21 @@ def checkImage(image, id, min_pixel=3 ,radius=2):
                 #plt.imshow(image)
                 #plt.ylabel(id)
                 #plt.show()
-                return 1
+
+                slice_pole = img[max(0, y[i] - radius):min(y[i] + radius, img.shape[0] - 1) + 1, x[i]:x[i]+1]
+                slp_y, slp_x = (np.where((slice_pole[:, :, 0] >= r) & (slice_pole[:, :, 1] >= g) & (slice_pole[:, :, 2] <= b)))
+
+                if slp_y > 0:
+                    return 1
     return 0
 
 
 if __name__ == '__main__':
     #read color that we want to search
     rightColor = imread.imread('right_color.jpg')[0][0]
-    print(rightColor)
-
+    poleColor = imread.imread('pole_color.jpg')[0][0]
+    print("rightColor: " + rightColor)
+    print("poleColor: " + poleColor)
     #get our images that we want to scan
     data = os.listdir(glob.glob('./seed**/')[0])
     print(data)
