@@ -25,8 +25,8 @@ def checkImage(image, id, min_pixel=3 ,radius=2):
     if len(y) >= min_pixel: #checks, if we have at least min_pixel=3 yellow pixels
         #print(x,y)
         for i in range(len(y)):
-            print('Koord. y: '+str(max(0, y[i]-radius))+" "+str(min(y[i]+radius,(img.shape[0]-1))))
-            print('Koord. x: '+str(max(0, x[i]-1))+" "+str(min(x[i]+1,img.shape[1]-1)))
+            #print('Koord. y: '+str(max(0, y[i]-radius))+" "+str(min(y[i]+radius,(img.shape[0]-1))))
+            #print('Koord. x: '+str(max(0, x[i]-1))+" "+str(min(x[i]+1,img.shape[1]-1)))
             slice = img[max(0, y[i]-radius):min(y[i]+radius, img.shape[0]-1)+1, max(0, x[i]-1):min(x[i]+1, img.shape[1]-1)+1]
             sl_y,sl_x = (np.where((slice[:, :, 0] >= r_rightColor) & (slice[:, :, 1] >= g_rightColor) & (slice[:, :, 2] <= b_rightColor)))
             if len(sl_y) >= min_pixel:
@@ -43,9 +43,9 @@ def checkImage(image, id, min_pixel=3 ,radius=2):
                 #print(np.shape(slice_pole))
 
                 slp_y = (np.where((slice_pole[:, 0] == r_poleColor) & (slice_pole[:, 1] == g_poleColor) & (slice_pole[:, 2] == b_poleColor)))
-                print(slp_y)
+                #print(slp_y)
                 #slp_y = np.squeeze(slp_y)
-                print(slp_y)
+                #print(slp_y)
                 if len(slp_y[0])>0:
                     #print('Koord. slp_y: ' + str(max(0, slp_y[i] - radius)) + " " + str(min(slp_y[i] + radius, (img.shape[0] - 1))))
                     #print('Koord. slp_x: ' + str(max(0, slp_x[i])) + " " + str(min(slp_x[i] + 1, img.shape[1])))
