@@ -37,6 +37,7 @@ def checkImage(image, id, min_pixel=3 ,radius=2):
                 #plt.ylabel(id)
                 #plt.show()
 
+
                 #slice_pole = slice[max(0, y[i] - radius):min(y[i] + radius, slice.shape[0] - 1) + 1, x[i]:x[i]+1]
                 #print(np.shape(slice))
                 slice_pole = slice[:,1,:]
@@ -51,6 +52,14 @@ def checkImage(image, id, min_pixel=3 ,radius=2):
                     #print('Koord. slp_x: ' + str(max(0, slp_x[i])) + " " + str(min(slp_x[i] + 1, img.shape[1])))
                     #print(slp_x)
                     return 1
+
+                print(slice_pole)
+                slf_y = (np.where((slice_pole[:, 0] >= r_rightColor) & (slice_pole[:, 1] >= g_rightColor) & (slice_pole[:, 2] <= b_rightColor)))
+
+                print(slf_y)
+                if len(slf_y[0]) == ((radius*2)+1):
+                    return 1
+
     return 0
 
 
