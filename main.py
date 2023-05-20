@@ -4,6 +4,7 @@ import numpy as np
 import os
 import glob
 import matplotlib.image as imread
+import sys
 import csv
 import matplotlib.colors as colors
 import matplotlib.pyplot as plt
@@ -50,7 +51,7 @@ def checkImage(image, id, min_pixel=3 ,radius=2):
                     #print('Koord. slp_y: ' + str(max(0, slp_y[i] - radius)) + " " + str(min(slp_y[i] + radius, (img.shape[0] - 1))))
                     #print('Koord. slp_x: ' + str(max(0, slp_x[i])) + " " + str(min(slp_x[i] + 1, img.shape[1])))
                     #print(slp_x)
-                    print(id)
+                    #print(id)
                     return 1
 
                 #print(slice_pole)
@@ -58,7 +59,7 @@ def checkImage(image, id, min_pixel=3 ,radius=2):
 
                 #print(slf_y)
                 if len(slf_y[0]) == ((radius*2)+1):
-                    print(id)
+                    #print(id)
                     return 1
 
     return 0
@@ -71,19 +72,30 @@ if __name__ == '__main__':
     print("rightColor: " + str(rightColor))
     print("poleColor: " + str(poleColor))
     #get our images that we want to scan
-    data = os.listdir(glob.glob('./seed**/')[0])
+    if len(sys.argv) == 1:  # when no arugment passed
+        data = os.listdir(glob.glob('./seed**/')[0])
+    else:
+        data = os.listdir(sys.argv[1])
     print(data)
 
     print(glob.glob('./seed**/')[0],data[0])
     #Image.open(glob.glob('./seed**/')[0]+data[0]).show()
 
-    imagefolder_path = glob.glob('./seed**/')[0]
+    imagefolder_path = ""
+
+    if len(sys.argv) == 1: #when no arugment passed
+        imagefolder_path = glob.glob('./seed**/')[0]
+    else:
+        imagefolder_path = sys.argv[1] #when argument passed, we take it as foldername
 
     names = []
     labels = []
     for image in data:
         names.append((image[0:6]+'.jpg'))
-        labels.append(checkImage(imread.imread(glob.glob('./seed**/')[0]+image), image))
+        if len(sys.argv) == 1:
+            labels.append(checkImage(imread.imread(glob.glob('./seed**/')[0]+image), image))
+        else:
+            labels.append(checkImage(imread.imread(sys.argv[1] + image), image))
     print(labels)
 
     dataframe = pandas.DataFrame()
@@ -93,10 +105,11 @@ if __name__ == '__main__':
     dataframe.reset_index(drop=True)
 
     print(dataframe)
-    dataframe.to_csv('dataframe.csv')
+    print(str(imagefolder_path)[2:-1])
+    dataframe.to_csv(f'dataframe_{(str(imagefolder_path))[2:-1]}.csv') #Array cuts Slashes, so that it does not get interpreted as path
 
 
 
     # label_picture()
     # fill_label_in_database()
-    # return database as csv
+    #return database as csv
