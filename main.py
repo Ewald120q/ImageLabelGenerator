@@ -1,14 +1,9 @@
 import pandas
-import pandas as pd
 import numpy as np
 import os
 import glob
 import matplotlib.image as imread
 import sys
-import csv
-import matplotlib.colors as colors
-import matplotlib.pyplot as plt
-from PIL import Image
 
 
 def checkImage(image, id, min_pixel=3 ,radius=2):
@@ -26,41 +21,71 @@ def checkImage(image, id, min_pixel=3 ,radius=2):
     if len(y) >= min_pixel: #checks, if we have at least min_pixel=3 yellow pixels
         #print(x,y)
         for i in range(len(y)):
-            #print('Koord. y: '+str(max(0, y[i]-radius))+" "+str(min(y[i]+radius,(img.shape[0]-1))))
-            #print('Koord. x: '+str(max(0, x[i]-1))+" "+str(min(x[i]+1,img.shape[1]-1)))
-            slice = img[max(0, y[i]-radius):min(y[i]+radius, img.shape[0]-1)+1, max(0, x[i]-1):min(x[i]+1, img.shape[1]-1)+1]
-            sl_y,sl_x = (np.where((slice[:, :, 0] >= r_rightColor) & (slice[:, :, 1] >= g_rightColor) & (slice[:, :, 2] <= b_rightColor)))
-            if len(sl_y) >= min_pixel:
-                #print("plot")
-                #print(image)
-                #plt.imshow(image)
-                #plt.ylabel(id)
-                #plt.show()
+            print(f"x:{x}")
+
+            if x[i] == 0 or x[i] == img.shape[1]-1:
+                print("dennis")
+                stripe = img[:,x[i],:]
+                print(stripe.shape)
+                stripe_y = (np.where((stripe[ :, 0] >= r_rightColor) & (stripe[ :, 1] >= g_rightColor) & (stripe[ :, 2] <= b_rightColor)))
+                for j in range(radius, img.shape[0]-(radius+1)):
+                    stripe_slice = stripe[j-radius: j+radius+1,:]
+                    stsly = np.where((stripe_slice[:, 0] >= r_rightColor) & (stripe_slice[:, 1] >= g_rightColor) & (
+                                stripe_slice[:, 2] <= b_rightColor))
+                    print(stsly)
+                    if len(stsly[0]) == ((radius*2)+1):
+                        return 1
 
 
-                #slice_pole = slice[max(0, y[i] - radius):min(y[i] + radius, slice.shape[0] - 1) + 1, x[i]:x[i]+1]
-                #print(np.shape(slice))
-                slice_pole = slice[:,1,:]
-                #print(np.shape(slice_pole))
 
-                slp_y = (np.where((slice_pole[:, 0] == r_poleColor) & (slice_pole[:, 1] == g_poleColor) & (slice_pole[:, 2] == b_poleColor)))
-                #print(slp_y)
-                #slp_y = np.squeeze(slp_y)
-                #print(slp_y)
-                if len(slp_y[0])>0:
-                    #print('Koord. slp_y: ' + str(max(0, slp_y[i] - radius)) + " " + str(min(slp_y[i] + radius, (img.shape[0] - 1))))
-                    #print('Koord. slp_x: ' + str(max(0, slp_x[i])) + " " + str(min(slp_x[i] + 1, img.shape[1])))
-                    #print(slp_x)
-                    #print(id)
-                    return 1
+            else:
+                    #print('Koord. y: '+str(max(0, y[i]-radius))+" "+str(min(y[i]+radius,(img.shape[0]-1))))
+                    #print('Koord. x: '+str(max(0, x[i]-1))+" "+str(min(x[i]+1,img.shape[1]-1)))
+                    slice = img[max(0, y[i]-radius):min(y[i]+radius, img.shape[0]-1)+1, max(0, x[i]-1):min(x[i]+1, img.shape[1]-1)+1]
+                    sl_y,sl_x = (np.where((slice[:, :, 0] >= r_rightColor) & (slice[:, :, 1] >= g_rightColor) & (slice[:, :, 2] <= b_rightColor)))
+                    if len(sl_y) >= min_pixel:
+                        #print("plot")
+                        #print(image)
+                        #plt.imshow(image)
+                        #plt.ylabel(id)
+                        #plt.show()
 
-                #print(slice_pole)
-                slf_y = (np.where((slice_pole[:, 0] >= r_rightColor) & (slice_pole[:, 1] >= g_rightColor) & (slice_pole[:, 2] <= b_rightColor)))
 
-                #print(slf_y)
-                if len(slf_y[0]) == ((radius*2)+1):
-                    #print(id)
-                    return 1
+                        #slice_pole = slice[max(0, y[i] - radius):min(y[i] + radius, slice.shape[0] - 1) + 1, x[i]:x[i]+1]
+                        #print(np.shape(slice))
+                        slice_pole = slice[:,1,:]
+
+                        if slice_pole.shape[1]==2:
+                            slice
+                        #print(np.shape(slice_pole))
+
+                        slp_y = (np.where((slice_pole[:, 0] == r_poleColor) & (slice_pole[:, 1] == g_poleColor) & (slice_pole[:, 2] == b_poleColor)))
+                        #print(slp_y)
+                        #slp_y = np.squeeze(slp_y)
+                        #print(slp_y)
+                        if len(slp_y[0])>0:
+                            #print('Koord. slp_y: ' + str(max(0, slp_y[i] - radius)) + " " + str(min(slp_y[i] + radius, (img.shape[0] - 1))))
+                            #print('Koord. slp_x: ' + str(max(0, slp_x[i])) + " " + str(min(slp_x[i] + 1, img.shape[1])))
+                            #print(slp_x)
+                            #print(id)
+                            return 1
+
+                        #print(slice_pole)
+                        slf_y = (np.where((slice_pole[:, 0] >= r_rightColor) & (slice_pole[:, 1] >= g_rightColor) & (slice_pole[:, 2] <= b_rightColor)))
+
+                        #print(slf_y)
+                        if len(slf_y[0]) == ((radius*2)+1):
+                            #print(id)
+                            print(slice)
+                            #left_from_poleslice = slice[:, 0, :]
+                            #right_from_poleslice = slice[:, min(2, slice.shape[0] - 1), :]
+
+                            outside_poleslice = np.delete(slice, 1, axis=0)
+
+                            lory = len(sl_y) - ((radius*2)+1)
+
+                            if lory > 0:
+                                return 1
 
     return 0
 
@@ -92,6 +117,7 @@ if __name__ == '__main__':
     labels = []
     for image in data:
         names.append((image[0:6]+'.jpg'))
+        print(image[0:6]+'.jpg')
         if len(sys.argv) == 1:
             labels.append(checkImage(imread.imread(glob.glob('./seed**/')[0]+image), image))
         else:
