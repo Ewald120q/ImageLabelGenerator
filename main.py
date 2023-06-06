@@ -7,6 +7,7 @@ import sys
 
 
 def checkImage(image, id, min_pixel=3 ,radius=2):
+    print('test')
     img = np.array(image)
 
     r_rightColor = rightColor[0]/255
@@ -24,7 +25,6 @@ def checkImage(image, id, min_pixel=3 ,radius=2):
             print(f"x:{x}")
 
             if x[i] == 0 or x[i] == img.shape[1]-1:
-                print("dennis")
                 stripe = img[:,x[i],:]
                 print(stripe.shape)
                 stripe_y = (np.where((stripe[ :, 0] >= r_rightColor) & (stripe[ :, 1] >= g_rightColor) & (stripe[ :, 2] <= b_rightColor)))
